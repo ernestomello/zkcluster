@@ -130,7 +130,7 @@ class User(models.Model):
         return self.name
 
 class Attendance(models.Model):
-    user = models.ForeignKey(User, related_name='attendances')
+    user = models.ForeignKey(User, related_name='attendances',on_delete=models.RESTRICT)
     timestamp = models.DateTimeField()
     status = models.IntegerField()
 

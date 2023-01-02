@@ -1,9 +1,12 @@
 from django.conf.urls import url, include
-
-import views
+from django.contrib import admin
+from zkcluster import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    
+
+    url(r'^admin', admin.site.urls, name='admin'),
+    url(r'^', views.index, name='index'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
 

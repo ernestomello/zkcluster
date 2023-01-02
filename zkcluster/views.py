@@ -13,7 +13,7 @@ from .models import Terminal, User, Attendance
 @alowed(['GET'])
 @login_required
 def index(request):
-    return render(request, 'zkcluster/index.html')
+    return render(request, 'index.html')
 
 @alowed(['GET'])
 @login_required
@@ -39,7 +39,7 @@ def terminal_add(request):
             try:
                 form.save()
                 return redirect('zkcluster:terminal')
-            except ZKError, e:
+            except ZKError as e:
                 messages.add_message(request, messages.ERROR, str(e))
     else:
         form = SaveTerminal(request.POST or None)
@@ -73,7 +73,7 @@ def terminal_scan(request):
 
             terminal.zk_disconnect()
             return terminal_add(request)
-        except ZKError, e:
+        except ZKError as e:
             messages.add_message(request, messages.ERROR, str(e))
 
     data = {
@@ -90,7 +90,7 @@ def terminal_edit(request, terminal_id):
     if request.POST and form.is_valid():
         try:
             form.save()
-        except ZKError, e:
+        except ZKError as e:
             messages.add_message(request, messages.ERROR, str(e))
         return redirect('zkcluster:terminal')
     data = {
@@ -104,7 +104,7 @@ def terminal_format(request, terminal_id):
     terminal = get_object_or_404(Terminal, pk=terminal_id)
     try:
         terminal.format()
-    except ZKError, e:
+    except ZKError as e:
         messages.add_message(request, messages.ERROR, str(e))
 
     return redirect('zkcluster:terminal')
@@ -114,7 +114,7 @@ def terminal_delete(request, terminal_id):
     terminal = get_object_or_404(Terminal, pk=terminal_id)
     try:
         terminal.delete()
-    except ZKError, e:
+    except ZKError as e:
         messages.add_message(request, messages.ERROR, str(e))
 
     return redirect('zkcluster:terminal')
@@ -125,7 +125,7 @@ def terminal_restart(request, terminal_id):
     try:
         terminal.zk_connect()
         terminal.zk_restart()
-    except ZKError, e:
+    except ZKError as e:
         messages.add_message(request, messages.ERROR, str(e))
 
     return redirect('zkcluster:terminal')
@@ -137,7 +137,7 @@ def terminal_poweroff(request, terminal_id):
         terminal.zk_connect()
         terminal.zk_poweroff()
         terminal.zk_disconnect()
-    except ZKError, e:
+    except ZKError as e:
         messages.add_message(request, messages.ERROR, str(e))
 
     return redirect('zkcluster:terminal')
@@ -149,7 +149,7 @@ def terminal_voice(request, terminal_id):
         terminal.zk_connect()
         terminal.zk_voice()
         terminal.zk_disconnect()
-    except ZKError, e:
+    except ZKError as e:
         messages.add_message(request, messages.ERROR, str(e))
 
     return redirect('zkcluster:terminal')
@@ -189,7 +189,7 @@ def user_add(request):
         try:
             form.save()
             return redirect('zkcluster:user')
-        except ZKError, e:
+        except ZKError as e:
             messages.add_message(request, messages.ERROR, str(e))
 
     data = {
@@ -206,7 +206,7 @@ def user_edit(request, user_id):
         try:
             form.save()
             return redirect('zkcluster:user')
-        except ZKError, e:
+        except ZKError as e:
             messages.add_message(request, messages.ERROR, str(e))
 
     data = {
@@ -220,7 +220,7 @@ def delete_user(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     try:
         user.delete()
-    except ZKError, e:
+    except ZKError as e:
         messages.add_message(request, messages.ERROR, str(e))
     return redirect('zkcluster:user')
 
@@ -261,6 +261,6 @@ def attendance_sync(request):
             terminal.zk_clear_attendances()
             terminal.zk_voice()
             terminal.zk_disconnect()
-        except ZKError, e:
+        except ZKError as e:
             pass
     return redirect('zkcluster:attendance')
